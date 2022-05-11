@@ -1,20 +1,26 @@
-"""Summary
+"""Server
 
 Attributes:
-    app (TYPE): Description
-    PORT (TYPE): Description
+    app (fastapi.applications.FastAPI): FastAPI instance
+    PORT (int): Port number
 """
+
+
 import os
-import dotenv
 import uvicorn
 from fastapi import FastAPI, Response
-from core import crud
+
+import dotenv
 dotenv.load_dotenv()
+
+#pylint: disable=wrong-import-position
+from core import crud
 
 PORT = int(os.environ['PORT'])
 
 app = FastAPI()
 
+@app.get('/patents/{doc_id}')
 @app.get('/docs/{doc_id}')
 async def get_doc(doc_id):
     """Return a document's data in JSON format
@@ -26,7 +32,8 @@ async def get_doc(doc_id):
         dict: Document data
     """
     return crud.get_doc(doc_id)
-    
+
+@app.delete('/patents/{doc_id}')
 @app.delete('/docs/{doc_id}')
 async def delete_doc(doc_id):
     """Delete the document
@@ -39,6 +46,7 @@ async def delete_doc(doc_id):
     """
     crud.delete_doc(doc_id)
 
+@app.get('/patents/{doc_id}/drawings')
 @app.get('/docs/{doc_id}/drawings')
 async def list_drawings(doc_id):
     """Return a list of drawings associated with a document (patent).
@@ -51,6 +59,7 @@ async def list_drawings(doc_id):
     """
     return crud.list_drawings(doc_id)
 
+@app.get('/patents/{doc_id}/drawings/{drawing_num}')
 @app.get('/docs/{doc_id}/drawings/{drawing_num}')
 async def get_drawing(doc_id, drawing_num):
     """Return image data of a particular drawing

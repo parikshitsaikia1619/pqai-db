@@ -3,6 +3,7 @@ __pycache__/
 *$py.class
 
 .env
+.env.*
 .venv
 env/
 venv/
@@ -10,3 +11,4 @@ ENV/
 env.bak/
 venv.bak/
 docker-compose.yml
+mongo-volume/
